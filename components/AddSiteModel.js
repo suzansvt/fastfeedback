@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-
+import { mutate } from "swr";
 import {
   Modal,
   ModalOverlay,
@@ -12,39 +12,71 @@ import {
   FormControl,
   FormLabel,
   Input,
+  useToast,
   useDisclosure,
   Button,
 } from "@chakra-ui/core";
 import { createSite } from "@/lib/db";
-
-const AddSiteModel = () => {
+import { useAuth } from "@/lib/auth";
+import fetcher from "utils/fetcher";
+const AddSiteModel = ({ children }) => {
   const initialRef = useRef();
+  const auth = useAuth();
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit } = useForm();
-  const onCreateSite = (values) => createSite(values);
+
+  const onCreateSite = ({ name, url }) => {
+    const newSite = {
+      authorId: auth.user.uid,
+      createdAt: new Date().toISOString(),
+      name,
+      url,
+    };
+    createSite(newSite);
+    toast({
+      title: "Success!",
+      description: "We've added your site.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+    mutate(
+      "/api/sites",
+      async (data) => {
+        return { sites: [...data.sites, newSite] };
+      },
+      false
+    );
+    onClose();
+  };
   return (
     <>
       <Button
-        fontWeight="medium"
-        maxW="200px"
-        variant="solid"
-        size="md"
         onClick={onOpen}
+        backgroundColor="gray.900"
+        color="white"
+        fontWeight="medium"
+        _hover={{ bg: "gray.700" }}
+        align-self="flex-end"
+        _active={{
+          bg: "gray.800",
+          transform: "scale(0.95)",
+        }}
       >
-        Add your first site
+        {children}
       </Button>
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onCreateSite)}>
-          <ModalHeader fontWeight="medium">Add Site</ModalHeader>
+          <ModalHeader fontWeight="bold">Add Site</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Name</FormLabel>
               <Input
-                ref={initialRef}
                 placeholder="My Site"
-                {...register("Site", { required: true })}
+                {...register("name", { required: true })}
               />
             </FormControl>
 
@@ -52,7 +84,7 @@ const AddSiteModel = () => {
               <FormLabel>Link</FormLabel>
               <Input
                 placeholder="http://website.com"
-                {...register("Url", { required: true })}
+                {...register("url", { required: true })}
               />
             </FormControl>
           </ModalBody>
