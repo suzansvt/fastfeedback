@@ -1,12 +1,11 @@
-import { CSSReset, useColorMode } from '@chakra-ui/core';
-import { ThemeProvider } from '@chakra-ui/core';
-import { AuthProvider } from '@/lib/auth'
-import customTheme from '@/styles/theme'
-import { Global, css } from '@emotion/core';
+import { CSSReset } from "@chakra-ui/core";
+import { ThemeProvider } from "@chakra-ui/core";
+import { AuthProvider } from "@/lib/auth";
+import customTheme from "@/styles/theme";
+import { Global, css } from "@emotion/core";
 const GlobalStyle = ({ children }) => {
   return (
     <>
-     
       <CSSReset />
       <Global
         styles={css`
@@ -25,14 +24,15 @@ const GlobalStyle = ({ children }) => {
     </>
   );
 };
-const App = ({ Component, pageProps }) =>{
+const App = ({ Component, pageProps }) => {
   return (
-  <ThemeProvider theme={customTheme} >
-   <AuthProvider> 
-    <GlobalStyle />
-      <Component {...pageProps} />
-   </AuthProvider>
-  </ThemeProvider>)
+    <ThemeProvider theme={customTheme}>
+      <AuthProvider>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </AuthProvider>
+    </ThemeProvider>
+  );
 };
 
 export default App;

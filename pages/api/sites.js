@@ -1,10 +1,12 @@
-import db from "@/lib/firebase-admin";
-export default async function Handler(_, res) {
-  const sitesRef = await db.collection("sites");
-  const snapshot = await sitesRef.get();
-  const sites = [];
-  snapshot.forEach((doc) => {
-    sites.push({ id: doc.id, ...doc.data() });
-  });
-  res.status(200).json({ sites });
+import { getUserSites } from "@/lib/db-admin";
+import { auth } from "@/lib/firebase-admin";
+export default async function Handler(req, res) {
+  try {
+    const { uid } = await auth.verifyIdToken(req.headers.token);
+
+    const sites = await getUserSites(uid);
+    res.status(200).json(sites);
+  } catch (error) {
+    res.status(200).json({ error });
+  }
 }
