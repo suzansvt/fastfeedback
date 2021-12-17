@@ -4,27 +4,30 @@ import { useAuth } from "@/lib/auth";
 import useSWR from "swr";
 import DashboardShell from "@/components/DashboardShell";
 import fetcher from "utils/fetcher";
-import SiteTable from "@/components/siteTable";
-import SiteTableHeader from "@/components/SiteTableHeader";
-
-const Dashboard = () => {
+import FeedbackTable from "@/components/FeedbackTable";
+import FeedbackTableHeader from "@/components/FeedbackTableHeader";
+const MyFeedback = () => {
   const { user } = useAuth();
-  const { data } = useSWR(user ? ["/api/sites", user.token] : null, fetcher);
-
+  const { data } = useSWR(user ? ["/api/feedback", user.token] : null, fetcher);
+  console.log(data);
   if (!data) {
     return (
       <DashboardShell>
-        <SiteTableHeader />
+        <FeedbackTableHeader />
         <SiteTableSkeleton />
       </DashboardShell>
     );
   }
   return (
     <DashboardShell>
-      <SiteTableHeader />
-      {data.sites ? <SiteTable sites={data.sites} /> : <EmptyState />}
+      <FeedbackTableHeader />
+      {data.feedback ? (
+        <FeedbackTable allFeedback={data.feedback} />
+      ) : (
+        <EmptyState />
+      )}
     </DashboardShell>
   );
 };
 
-export default Dashboard;
+export default MyFeedback;
