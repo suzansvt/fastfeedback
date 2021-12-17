@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/core";
 import { createSite } from "@/lib/db";
 import { useAuth } from "@/lib/auth";
-import fetcher from "utils/fetcher";
 const AddSiteModel = ({ children }) => {
   const initialRef = useRef();
   const auth = useAuth();
@@ -33,7 +32,7 @@ const AddSiteModel = ({ children }) => {
       name,
       url,
     };
-    createSite(newSite);
+    const { id } = createSite(newSite);
     toast({
       title: "Success!",
       description: "We've added your site.",
@@ -43,9 +42,9 @@ const AddSiteModel = ({ children }) => {
     });
     mutate(
       ["/api/sites", auth.user.token],
-      async (data) => {
-        return { sites: [...data.sites, newSite] };
-      },
+      async (data) => ({
+        sites: [...data.sites, { id, ...newSite }],
+      }),
       false
     );
     onClose();
