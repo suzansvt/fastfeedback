@@ -55,6 +55,7 @@ const DashboardShell = ({ children }) => {
                   <Button variant="ghost" mr={2}>
                     Account
                   </Button>
+                  <Avatar size="sm" src={user?.photoUrl} />
                 </Link>
               </NextLink>
             </Flex>
