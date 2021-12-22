@@ -20,7 +20,6 @@ const Home = () => {
         `,
           }}
         />
-        <title>Fast Feedback</title>
       </head>
 
       <Icon color="black" name="logo" size="48px" mb={2} />
