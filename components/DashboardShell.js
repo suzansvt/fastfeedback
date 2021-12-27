@@ -1,24 +1,11 @@
-import React, { Children, useEffect } from "react";
 import { Flex, Link, Icon, Avatar, Box, Button } from "@chakra-ui/core";
 import { useAuth } from "@/lib/auth";
 import NextLink from "next/link";
-import { NextSeo } from "next-seo";
 const DashboardShell = ({ children }) => {
   const { user, signout } = useAuth();
-  // const path = window.location.pathname;
-  // const name = path.charAt(1).toUpperCase() + path.slice(2);
-  // const title = ` Fast Feedback – ${name}`;
-  // const url = ` http://fastfeedback-suzansvt.vercel.app${path}`;
+
   return (
     <>
-      {/* <NextSeo
-        title={title}
-        canonical={url}
-        openGraph={{
-          url,
-          title,
-        }}
-      /> */}
       <Box backgroundColor="gray.100" h="100hv">
         <Flex backgroundColor="white" mb={16} w="full">
           <Flex
@@ -37,7 +24,7 @@ const DashboardShell = ({ children }) => {
                   <Icon name="logo" size="24px" mr={8} />
                 </Link>
               </NextLink>
-              <NextLink href="/dashboard" passHref>
+              <NextLink href="/sites" passHref>
                 <Link mr={4}>Sites</Link>
               </NextLink>
               <NextLink href="/feedback" passHref>

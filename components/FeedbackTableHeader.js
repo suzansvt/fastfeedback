@@ -5,18 +5,23 @@ import {
   Heading,
   BreadcrumbItem,
   BreadcrumbLink,
+  Box,
 } from "@chakra-ui/core";
+import NextLink from "next/link";
 
-const FeedbackTableHeader = () => (
-  <>
+const FeedbackTableHeader = ({ siteName }) => (
+  <Box>
     <Breadcrumb>
       <BreadcrumbItem>
-        <BreadcrumbLink>Feedback</BreadcrumbLink>
+        <NextLink href="/feedback" passHref>
+          <BreadcrumbLink>Feedback</BreadcrumbLink>
+        </NextLink>
       </BreadcrumbItem>
     </Breadcrumb>
+
     <Flex justifyContent="space-between">
-      <Heading mb={8}>My Feedback</Heading>
+      <Heading mb={8}>All Feedback</Heading>
     </Flex>
-  </>
+  </Box>
 );
 export default FeedbackTableHeader;

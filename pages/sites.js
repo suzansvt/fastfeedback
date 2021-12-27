@@ -6,6 +6,7 @@ import DashboardShell from "@/components/DashboardShell";
 import fetcher from "utils/fetcher";
 import SiteTable from "@/components/siteTable";
 import SiteTableHeader from "@/components/SiteTableHeader";
+import Page from "@/components/Page";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -26,5 +27,9 @@ const Dashboard = () => {
     </DashboardShell>
   );
 };
-
-export default Dashboard;
+const DashboardPage = () => (
+  <Page name="Dashboard" path="/dashboard">
+    <Dashboard />
+  </Page>
+);
+export default DashboardPage;

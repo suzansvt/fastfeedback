@@ -1,96 +1,98 @@
 import { useAuth } from "@/lib/auth";
-import { Button, Stack, Icon, Flex, Text, Link } from "@chakra-ui/core";
-const Home = () => {
+import Head from "next/head";
+import { Box, Button, Flex, Text, Icon, Link, Stack } from "@chakra-ui/core";
+import { getAllFeedback, getSite } from "@/lib/db-admin";
+import Feedback from "@/components/Feedback";
+import FeedbackLink from "@/components/FeedbackLink";
+
+const SITE_ID = "6lGpt2Rg2UqvUfA4GmNu";
+
+export async function getStaticProps(context) {
+  const { feedback } = await getAllFeedback(SITE_ID);
+  const { site } = await getSite(SITE_ID);
+
+  return {
+    props: {
+      allFeedback: feedback,
+      site,
+    },
+    revalidate: 1,
+  };
+}
+const Home = ({ allFeedback, site }) => {
   const auth = useAuth();
   return (
-    <Flex
-      as="main"
-      direction="column"
-      align="center"
-      justify="center"
-      h="100vh"
-    >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-             if (document.cookie && document.cookie.includes('fast-feedback-auth')) {
-               window.location.href = "/dashboard"
-             }
-        `,
-          }}
-        />
-      </head>
-
-      <Icon color="black" name="logo" size="48px" mb={2} />
-      <Text mb={4} fontSize="lg" p={6}>
-        <Text as="span" fontWeight="bold" display="inline">
-          Fast Feedback
-        </Text>
-        {" is being built as part of "}
-        <Link
-          href="https://react2025.com"
-          isExternal
-          textDecoration="underline"
-        >
-          React 2025
-        </Link>
-        {`. It's the easiest way to add comments or reviews to your static site. Try it out by leaving a comment below. After the comment is approved, it will display below.`}
-      </Text>
-      {auth.user ? (
-        <Button
-          as="a"
-          href="/dashboard"
-          backgroundColor="white"
-          color="gray.900"
-          variant="outline"
-          fontWeight="medium"
-          mt={4}
-          _hover={{ bg: "gray.100" }}
-          _active={{
-            bg: "gray.100",
-            transform: "scale(0.95)",
-          }}
-        >
-          View Dashboard{" "}
-        </Button>
-      ) : (
-        <Stack>
-          <Button
-            onClick={(e) => auth.signinWithGithub()}
-            backgroundColor="gray.900"
-            color="white"
-            fontWeight="lg"
-            leftIcon="github"
-            _hover={{ bg: "gray.700" }}
-            align-self="flex-end"
-            _active={{
-              bg: "gray.800",
-              transform: "scale(0.95)",
-            }}
-          >
-            Sign In with Github
-          </Button>
-          <Button
-            onClick={(e) => auth.signinWithGoogle()}
-            backgroundColor="white"
-            color="gray.900"
-            variant="outLine"
-            fontWeight="medium"
-            mt={4}
-            leftIcon="google"
-            _hover={{ bg: "gray.100" }}
-            align-self="flex-end"
-            _active={{
-              bg: "gray.100",
-              transform: "scale(0.95)",
-            }}
-          >
-            Sign In with Google
-          </Button>
-        </Stack>
-      )}
-    </Flex>
+    <>
+      <Box bg="gray.100" py={16}>
+        <Flex as="main" direction="column" maxW="700px" margin="0 auto">
+          <Head>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+            if (document.cookie && document.cookie.includes('fast-feedback-auth')) {
+              window.location.href = "/sites"
+            }
+          `,
+              }}
+            />
+          </Head>
+          <Icon color="black" name="logo" size="48px" mb={2} />
+          <Text mb={4} fontSize="lg" py={4}>
+            <Text as="span" fontWeight="bold" display="inline">
+              Fast Feedback
+            </Text>
+            {" is being built as part of "}
+            <Link
+              href="https://react2025.com"
+              isExternal
+              textDecoration="underline"
+            >
+              React 2025
+            </Link>
+            {`. It's the easiest way to add comments or reviews to your static site. It's still a work-in-progress, but you can try it out by logging in.`}
+          </Text>
+          {auth.user ? (
+            <Button
+              as="a"
+              href="/sites"
+              backgroundColor="gray.900"
+              color="white"
+              fontWeight="medium"
+              mt={4}
+              maxW="200px"
+              _hover={{ bg: "gray.700" }}
+              _active={{
+                bg: "gray.800",
+                transform: "scale(0.95)",
+              }}
+            >
+              View Dashboard
+            </Button>
+          ) : (
+            // <LoginButtons />
+            <p>Hi</p>
+          )}
+        </Flex>
+      </Box>
+      <Box
+        display="flex"
+        flexDirection="column"
+        width="full"
+        maxWidth="700px"
+        margin="0 auto"
+        mt={8}
+      >
+        <FeedbackLink paths={[SITE_ID]} />
+        {allFeedback.map((feedback, index) => (
+          <Feedback
+            key={feedback.id}
+            settings={site?.settings}
+            isLast={index === allFeedback.length - 1}
+            {...feedback}
+          />
+        ))}
+      </Box>
+    </>
   );
 };
 
