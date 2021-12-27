@@ -12,10 +12,12 @@ import {
 } from "@chakra-ui/core";
 import { deleteFeedback } from "@/lib/db";
 import { useAuth } from "@/lib/auth";
+
 const RemoveButton = ({ feedbackId }) => {
   const [isOpen, setIsOpen] = useState();
   const cancelRef = useRef();
   const auth = useAuth();
+
   const onClose = () => setIsOpen(false);
   const onDelete = () => {
     deleteFeedback(feedbackId),
