@@ -4,6 +4,7 @@ import { Box, Button, Flex, Text, Icon, Link, Stack } from "@chakra-ui/core";
 import { getAllFeedback, getSite } from "@/lib/db-admin";
 import Feedback from "@/components/Feedback";
 import feedbackLink from "@/components/feedbackLink";
+import LoginButtons from "@/components/LoginButtons";
 
 const SITE_ID = "6lGpt2Rg2UqvUfA4GmNu";
 
@@ -69,8 +70,7 @@ const Home = ({ allFeedback, site }) => {
               View Dashboard
             </Button>
           ) : (
-            // <LoginButtons />
-            <p>Hi</p>
+            <LoginButtons />
           )}
         </Flex>
       </Box>
