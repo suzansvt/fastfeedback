@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/core";
 import "iframe-resizer/js/iframeResizer.contentWindow";
 
 import Feedback from "@/components/Feedback";
-import FeedbackLink from "@/components/FeedbackLink";
+import feedbackLink from "@/components/feedbackLink";
 import { getAllFeedback, getAllSites, getSite } from "@/lib/db-admin";
 
 export async function getStaticProps(context) {
@@ -39,7 +39,7 @@ const EmbeddedFeedbackPage = ({ initialFeedback, site }) => {
 
   return (
     <Box display="flex" flexDirection="column" width="full">
-      <FeedbackLink paths={router.query.site} />
+      <feedbackLink paths={router.query.site} />
       {initialFeedback?.length ? (
         initialFeedback.map((feedback, index) => (
           <Feedback

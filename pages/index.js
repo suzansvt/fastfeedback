@@ -3,7 +3,7 @@ import Head from "next/head";
 import { Box, Button, Flex, Text, Icon, Link, Stack } from "@chakra-ui/core";
 import { getAllFeedback, getSite } from "@/lib/db-admin";
 import Feedback from "@/components/Feedback";
-import FeedbackLink from "@/components/FeedbackLink";
+import feedbackLink from "@/components/feedbackLink";
 
 const SITE_ID = "6lGpt2Rg2UqvUfA4GmNu";
 
@@ -82,7 +82,7 @@ const Home = ({ allFeedback, site }) => {
         margin="0 auto"
         mt={8}
       >
-        <FeedbackLink paths={[SITE_ID]} />
+        <feedbackLink paths={[SITE_ID]} />
         {allFeedback.map((feedback, index) => (
           <Feedback
             key={feedback.id}
